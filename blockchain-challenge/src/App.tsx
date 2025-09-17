@@ -1,6 +1,7 @@
 import { Container, Typography, Box } from '@mui/material'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { NetworkStatus } from './components/NetworkStatus'
+import { TokenBalances } from './components/TokenBalances'
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       </Typography>
 
       <NetworkStatus />
+      <TokenBalances />
 
       <Box display="flex" justifyContent="center">
           <ConnectButton />
