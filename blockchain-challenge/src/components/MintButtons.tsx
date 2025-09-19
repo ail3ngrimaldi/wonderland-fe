@@ -2,20 +2,7 @@ import { Button, Box, Typography, CircularProgress, Alert, Card, CardContent } f
   import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
   import { parseUnits, formatUnits } from 'viem'
   import { sepolia } from 'wagmi/chains'
-  import { SEPOLIA_CONTRACTS } from '../config/contracts'
-
-  const MINT_ABI = [
-    {
-      name: 'mint',
-      type: 'function',
-      stateMutability: 'nonpayable',
-      inputs: [
-        { name: '_address', type: 'address' },
-        { name: '_value', type: 'uint256' }
-      ],
-      outputs: []
-    }
-  ] as const
+  import { SEPOLIA_CONTRACTS, ERC20_ABI } from '../config/contracts'
 
   export function MintButtons() {
     const { address, isConnected, chain } = useAccount()
@@ -54,7 +41,7 @@ import { Button, Box, Typography, CircularProgress, Alert, Card, CardContent } f
         reset() // Limpiar estado anterior
         writeContract({
           address: SEPOLIA_CONTRACTS.DAI,
-          abi: MINT_ABI,
+          abi: ERC20_ABI,
           functionName: 'mint',
           args: [address, amount],
         })

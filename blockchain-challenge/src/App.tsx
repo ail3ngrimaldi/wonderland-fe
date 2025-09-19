@@ -3,6 +3,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { NetworkStatus } from './components/NetworkStatus'
 import { TokenBalances } from './components/TokenBalances'
 import { MintButtons } from './components/MintButtons'
+import { TokenOperations } from './components/TokenOperations'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <NetworkStatus />
       <TokenBalances />
       <MintButtons />
+      <TokenOperations />
 
       <Box display="flex" justifyContent="center">
           <ConnectButton />
