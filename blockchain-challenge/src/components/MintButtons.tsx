@@ -11,7 +11,7 @@ import { Button, Box, Typography, CircularProgress, Alert, Card, CardContent } f
     const [processedHashes, setProcessedHashes] = useState<Set<string>>(new Set())
     const { addTransaction } = useTransactions()
     const { writeContract, isPending, data: hash, error, reset } = useWriteContract()
-    const { isLoading: isConfirming, isSuccess, data: receipt } = useWaitForTransactionReceipt({ hash })
+    const { isLoading: isConfirming, isSuccess, data: receipt, error: receiptError } = useWaitForTransactionReceipt({ hash })
 
     useEffect(() => {
         if (isSuccess && hash && receipt && !processedHashes.has(hash)) {
