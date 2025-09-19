@@ -3,42 +3,39 @@ import { Button, Box, Typography, CircularProgress, Alert, Card, CardContent } f
   import { parseUnits, formatUnits } from 'viem'
   import { sepolia } from 'wagmi/chains'
   import { SEPOLIA_CONTRACTS, ERC20_ABI } from '../config/contracts'
+  import { useTransactions } from '../context/TransactionContext'
+  import { useEffect, useState } from 'react'
 
   export function MintButtons() {
     const { address, isConnected, chain } = useAccount()
-
+    const [processedHashes, setProcessedHashes] = useState<Set<string>>(new Set())
+    const { addTransaction } = useTransactions()
     const { writeContract, isPending, data: hash, error, reset } = useWriteContract()
+    const { isLoading: isConfirming, isSuccess, data: receipt } = useWaitForTransactionReceipt({ hash })
 
-    const { isLoading: isConfirming, isSuccess, error: receiptError, data: receipt } = useWaitForTransactionReceipt({
-      hash,
-    })
-
-    console.group('🔍 MintButtons Debug State')
-    console.log('📝 Connected:', isConnected)
-    console.log('📝 Address:', address)
-    console.log('📝 Chain:', chain?.name, `(${chain?.id})`)
-    console.log('📝 isPending (signing):', isPending)
-    console.log('📝 isConfirming (mining):', isConfirming)
-    console.log('📝 Hash:', hash)
-    console.log('📝 Receipt:', receipt)
-    console.log('📝 Error:', error?.message)
-    console.log('📝 Receipt Error:', receiptError?.message)
-    console.groupEnd()
+    useEffect(() => {
+        if (isSuccess && hash && receipt && !processedHashes.has(hash)) {
+            addTransaction({
+                hash: hash, // ✅ hash es el string directamente
+                type: 'mint',
+                tokenContract: receipt.to || '',
+                timestamp: Date.now(),
+                tokenSymbol: receipt.to === SEPOLIA_CONTRACTS.DAI ? 'DAI' : 'USDC',
+                amount: '10'
+            })
+  
+            setProcessedHashes(prev => new Set([...prev, hash]))
+        }
+    }, [isSuccess, hash, receipt, addTransaction, processedHashes])
 
     if (!isConnected || chain?.id !== sepolia.id || !address) {
       return null
     }
 
     const mintDAI = () => {
-        console.group('🚀 Initiating DAI Mint')
         const amount = parseUnits('10', 18)
-        console.log('📊 Amount (raw):', amount.toString())
-        console.log('📊 Amount (formatted):', formatUnits(amount, 18))
-        console.log('📊 Contract:', SEPOLIA_CONTRACTS.DAI)
-        console.log('📊 Recipient:', address)
-        console.groupEnd()
   
-        reset() // Limpiar estado anterior
+        reset()
         writeContract({
           address: SEPOLIA_CONTRACTS.DAI,
           abi: ERC20_ABI,
@@ -48,18 +45,12 @@ import { Button, Box, Typography, CircularProgress, Alert, Card, CardContent } f
       }
 
       const mintUSDC = () => {
-        console.group('🚀 Initiating USDC Mint')
         const amount = parseUnits('10', 6)
-        console.log('📊 Amount (raw):', amount.toString())
-        console.log('📊 Amount (formatted):', formatUnits(amount, 6))
-        console.log('📊 Contract:', SEPOLIA_CONTRACTS.USDC)
-        console.log('📊 Recipient:', address)
-        console.groupEnd()
-  
-        reset() // Limpiar estado anterior
+        
+        reset()
         writeContract({
           address: SEPOLIA_CONTRACTS.USDC,
-          abi: MINT_ABI,
+          abi: ERC20_ABI,
           functionName: 'mint',
           args: [address, parseUnits('10', 6)],
         })
@@ -75,21 +66,18 @@ import { Button, Box, Typography, CircularProgress, Alert, Card, CardContent } f
           Get free testnet tokens to test the app functionality
         </Typography>
 
-         {/* 🔍 DEBUG: Estado visual en UI */}
-         <Card sx={{ mb: 2, bgcolor: 'grey.50' }}>
-          <CardContent>
+        <Card sx={{ mb: 2, bgcolor: 'grey.50' }}>
+            <CardContent>
             <Typography variant="subtitle2" gutterBottom>
-              🔍 Transaction Debug Info
+                🔍 Transaction Debug Info
             </Typography>
-            <Typography variant="body2" sx={{ fontFamily: 'monospace', fontSize: 
-  '0.75rem' }}>
-              Status: {isPending ? '⏳ Signing...' : isConfirming ? '⛏️ Mining...' :
-  isSuccess ? '✅ Complete' : '⭕ Ready'}<br/>
-              Hash: {hash ? `${hash.slice(0, 10)}...${hash.slice(-8)}` : 'None'}<br/>
-              Block: {receipt?.blockNumber?.toString() || 'Pending'}<br/>
-              Gas Used: {receipt?.gasUsed?.toString() || 'Pending'}
+            <Typography variant="body2" sx={{ fontFamily: 'monospace', fontSize: '0.75rem' }}>
+                Status: {isPending ? '⏳ Signing...' : isConfirming ? '⛏️ Mining...' : isSuccess ? '✅ Complete' : '⭕ Ready'} <br/>
+                Hash: {hash ? `${hash.slice(0, 10)}...${hash.slice(-8)}` : 'None'} <br/>
+                Block: {receipt?.blockNumber?.toString() || 'Pending'} <br/>
+                Gas Used: {receipt?.gasUsed?.toString() || 'Pending'}
             </Typography>
-          </CardContent>
+            </CardContent>
         </Card>
         
 
@@ -98,8 +86,7 @@ import { Button, Box, Typography, CircularProgress, Alert, Card, CardContent } f
             variant="contained"
             onClick={mintDAI}
             disabled={isPending || isConfirming}
-            startIcon={isPending || isConfirming ? <CircularProgress size={16} /> :
-  null}
+            startIcon={isPending || isConfirming ? <CircularProgress size={16} /> : null}
           >
             {isPending ? 'Signing DAI...' : isConfirming ? 'Mining DAI...' : 'Mint 10DAI'}
           </Button>
@@ -108,8 +95,7 @@ import { Button, Box, Typography, CircularProgress, Alert, Card, CardContent } f
             variant="contained"
             onClick={mintUSDC}
             disabled={isPending || isConfirming}
-            startIcon={isPending || isConfirming ? <CircularProgress size={16} /> :
-  null}
+            startIcon={isPending || isConfirming ? <CircularProgress size={16} /> : null}
           >
             {isPending ? 'Signing USDC...' : isConfirming ? 'Mining USDC...' : 'Mint 10USDC'}          
           </Button>
@@ -135,20 +121,18 @@ import { Button, Box, Typography, CircularProgress, Alert, Card, CardContent } f
         )}
 
         {isSuccess && receipt && (
-          <Alert severity="success" sx={{ mt: 2 }}>
+            <Alert severity="success" sx={{ mt: 2 }}>
             <Typography variant="subtitle2">✅ Transaction Successful!</Typography>
             <Typography variant="body2" sx={{ fontFamily: 'monospace' }}>
-              Block: {receipt.blockNumber.toString()}<br/>
-              Gas: {receipt.gasUsed.toString()}<br/>
-              Hash: {hash}
+                Block: {receipt.blockNumber.toString()}<br/>
+                Gas: {receipt.gasUsed.toString()}<br/>
+                Hash: {hash}
             </Typography>
-            <Typography variant="body2" sx={{ mt: 1 }}>
-              Tokens minted! Check your balance above.
-            </Typography>
-          </Alert>
+            <Typography variant="body2" sx={{ mt: 1 }}> Tokens minted! Check your balance above. </Typography>
+            </Alert>
         )}
 
-        {hash && (
+        {receipt && (
           <Box sx={{ mt: 2 }}>
             <Typography variant="body2">
               📊 <a 
