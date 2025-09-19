@@ -5,6 +5,7 @@ import React from 'react'
   import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
   import { wagmiConfig } from './config/wagmi'
   import App from './App'
+  import { TransactionProvider } from './context/TransactionContext'
 
   import '@rainbow-me/rainbowkit/styles.css'
 
@@ -15,7 +16,9 @@ import React from 'react'
       <WagmiProvider config={wagmiConfig}>
         <QueryClientProvider client={queryClient}>
           <RainbowKitProvider>
-            <App />
+            <TransactionProvider>
+              <App />
+            </TransactionProvider>
           </RainbowKitProvider>
         </QueryClientProvider>
       </WagmiProvider>

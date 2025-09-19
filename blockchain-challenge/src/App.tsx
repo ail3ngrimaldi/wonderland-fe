@@ -4,6 +4,8 @@ import { NetworkStatus } from './components/NetworkStatus'
 import { TokenBalances } from './components/TokenBalances'
 import { MintButtons } from './components/MintButtons'
 import { TokenOperations } from './components/TokenOperations'
+import { EventTable } from './components/EventTable'
+
 
 function App() {
   return (
@@ -16,6 +18,7 @@ function App() {
       <TokenBalances />
       <MintButtons />
       <TokenOperations />
+      <EventTable />
 
       <Box display="flex" justifyContent="center">
           <ConnectButton />
