@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { usePublicClient } from 'wagmi'
+import { formatHash } from '../utils/tokenUtils'
 
 type EnrichedTransactionData = {
   blockNumber: bigint
@@ -27,7 +28,7 @@ export function useTransactionDetails(hash: string | undefined) {
       setError(null)
 
       try {
-        console.log('🔍 Fetching transaction details for:', hash.slice(0, 10))
+        console.log('🔍 Fetching transaction details for:', formatHash(hash))
 
         const receipt = await publicClient.getTransactionReceipt({
           hash: hash as `0x${string}`
