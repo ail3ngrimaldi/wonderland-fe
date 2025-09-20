@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode, useCallback, useEffect } from 'react'
+import { formatHash } from '../utils/tokenUtils'
 
 type StoredTransaction = {
   hash: string
@@ -65,23 +66,20 @@ export function TransactionProvider({ children }: { children: ReactNode }) {
       StoredTransaction) => {
         console.group('🔍 DEBUG addTransaction')
         console.log('- Type:', transaction.type)
-        console.log('- Hash:', transaction.hash.slice(0, 10))
+        console.log('- Hash:', formatHash(transaction.hash))
         console.log('- Contract:', transaction.tokenContract)
         console.log('- Current transactions count:',
       transactions.length)
         console.groupEnd()
     
         setTransactions(prev => {
-          const exists = prev.some(tx => tx.hash ===
-      transaction.hash)
+          const exists = prev.some(tx => tx.hash === transaction.hash)
           if (exists) {
-            console.log('🔄 Transaction hash already stored:',
-      transaction.hash.slice(0, 10))
+            console.log('🔄 Transaction hash already stored:', formatHash(transaction.hash))
             return prev
           }
     
-          console.log('✅ Adding transaction hash:',
-      transaction.type, transaction.hash.slice(0, 10))
+        console.log('✅ Adding transaction hash:', transaction.type, formatHash(transaction.hash))
           return [transaction, ...prev]
         })
       }, [])
