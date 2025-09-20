@@ -5,6 +5,7 @@ import { Button, Box, Typography, CircularProgress, Alert, Card, CardContent } f
   import { SEPOLIA_CONTRACTS, ERC20_ABI } from '../config/contracts'
   import { useTransactions } from '../context/TransactionContext'
   import { useEffect, useState } from 'react'
+  import { getTokenDecimals, formatHash, parseTokenAmount, getTokenSymbol } from '../utils/tokenUtils'
 
   export function MintButtons() {
     const { address, isConnected, chain } = useAccount()
@@ -20,7 +21,7 @@ import { Button, Box, Typography, CircularProgress, Alert, Card, CardContent } f
                 type: 'mint',
                 tokenContract: receipt.to || '',
                 timestamp: Date.now(),
-                tokenSymbol: receipt.to === SEPOLIA_CONTRACTS.DAI ? 'DAI' : 'USDC',
+                tokenSymbol: getTokenSymbol(receipt.to || '') as 'DAI' | 'USDC',
                 amount: '10'
             })
   
@@ -33,7 +34,7 @@ import { Button, Box, Typography, CircularProgress, Alert, Card, CardContent } f
     }
 
     const mintDAI = () => {
-        const amount = parseUnits('10', 18)
+        const amount = parseTokenAmount('10', 'DAI')
   
         reset()
         writeContract({
@@ -45,14 +46,14 @@ import { Button, Box, Typography, CircularProgress, Alert, Card, CardContent } f
       }
 
       const mintUSDC = () => {
-        const amount = parseUnits('10', 6)
+        const amount = parseTokenAmount('10', 'USDC')
         
         reset()
         writeContract({
           address: SEPOLIA_CONTRACTS.USDC,
           abi: ERC20_ABI,
           functionName: 'mint',
-          args: [address, parseUnits('10', 6)],
+          args: [address, amount],
         })
       }
 
@@ -73,7 +74,7 @@ import { Button, Box, Typography, CircularProgress, Alert, Card, CardContent } f
             </Typography>
             <Typography variant="body2" sx={{ fontFamily: 'monospace', fontSize: '0.75rem' }}>
                 Status: {isPending ? '⏳ Signing...' : isConfirming ? '⛏️ Mining...' : isSuccess ? '✅ Complete' : '⭕ Ready'} <br/>
-                Hash: {hash ? `${hash.slice(0, 10)}...${hash.slice(-8)}` : 'None'} <br/>
+                Hash: {hash ? formatHash(hash) : 'None'} <br/>
                 Block: {receipt?.blockNumber?.toString() || 'Pending'} <br/>
                 Gas Used: {receipt?.gasUsed?.toString() || 'Pending'}
             </Typography>
