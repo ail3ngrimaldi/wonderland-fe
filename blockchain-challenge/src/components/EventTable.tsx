@@ -18,6 +18,7 @@ import { sepolia } from 'wagmi/chains'
 import { useTransactions } from '../context/TransactionContext'
 import { SEPOLIA_CONTRACTS } from '../config/contracts'
 import { useTransactionDetails } from '../hooks/useTransactionDetails'
+import { formatHash } from '../utils/tokenUtils'
 
 function TransactionRow({ transaction, index }: { transaction: any, index: number }) {
     const { data: enrichedData, isLoading } = useTransactionDetails(transaction.hash)
@@ -29,11 +30,6 @@ function TransactionRow({ transaction, index }: { transaction: any, index: numbe
          case 'approve': return 'warning'
          default: return 'default'
         }
-    }
- 
-    const formatAddress = (addr?: string) => {
-       if (!addr) return '-'
-       return `${addr.slice(0, 6)}...${addr.slice(-4)}`
     }
  
     const formatTime = (timestamp: number) => {
@@ -71,7 +67,7 @@ function TransactionRow({ transaction, index }: { transaction: any, index: numbe
                     target="_blank"
                     rel="noopener noreferrer"
                 >
-                    {formatAddress(transaction.hash)}
+                    {formatHash(transaction.hash)}
                 </Link>
             </TableCell>
         </TableRow>
