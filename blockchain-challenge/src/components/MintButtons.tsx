@@ -85,6 +85,7 @@ import { Button, Box, Typography, CircularProgress, Alert, Card, CardContent } f
         <Box display="flex" gap={2}>
           <Button
             variant="contained"
+            color="mint"
             onClick={mintDAI}
             disabled={isPending || isConfirming}
             startIcon={isPending || isConfirming ? <CircularProgress size={16} /> : null}
@@ -94,6 +95,7 @@ import { Button, Box, Typography, CircularProgress, Alert, Card, CardContent } f
 
           <Button
             variant="contained"
+            color="mint"
             onClick={mintUSDC}
             disabled={isPending || isConfirming}
             startIcon={isPending || isConfirming ? <CircularProgress size={16} /> : null}

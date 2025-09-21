@@ -25,9 +25,9 @@ function TransactionRow({ transaction, index }: { transaction: any, index: numbe
  
     const getEventColor = (type: string) => {
        switch (type) {
-         case 'mint': return 'success'
-         case 'transfer': return 'primary'
-         case 'approve': return 'warning'
+         case 'mint': return 'mint'
+         case 'transfer': return 'transfer'
+         case 'approve': return 'approve'
          default: return 'default'
         }
     }
