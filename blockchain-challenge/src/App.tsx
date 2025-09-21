@@ -1,5 +1,5 @@
-import { Container, Typography, Box } from '@mui/material'
-import { ConnectButton } from '@rainbow-me/rainbowkit'
+import { Container, Box } from '@mui/material'
+import { Header } from './components/Header'
 import { NetworkStatus } from './components/NetworkStatus'
 import { TokenBalances } from './components/TokenBalances'
 import { MintButtons } from './components/MintButtons'
@@ -8,21 +8,16 @@ import { EventTable } from './components/EventTable'
 
 function App() {
   return (
-    <Container>
-      <Typography variant="h4" align="center" sx={{ mt: 4 }}>
-        Blockchain Challenge
-      </Typography>
-
-      <NetworkStatus />
-      <TokenBalances />
-      <MintButtons />
-      <TokenOperations />
-      <EventTable />
-
-      <Box display="flex" justifyContent="center">
-          <ConnectButton />
-      </Box>
-    </Container>
+    <Box>
+      <Header />
+      <Container sx={{ py: 3 }}>
+        <NetworkStatus />
+        <TokenBalances />
+        <MintButtons />
+        <TokenOperations />
+        <EventTable />
+      </Container>
+    </Box>
   );
 }
 
