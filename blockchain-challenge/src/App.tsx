@@ -6,7 +6,6 @@ import { MintButtons } from './components/MintButtons'
 import { TokenOperations } from './components/TokenOperations'
 import { EventTable } from './components/EventTable'
 
-
 function App() {
   return (
     <Container>

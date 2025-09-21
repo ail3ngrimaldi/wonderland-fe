@@ -181,6 +181,7 @@ export function TokenOperations() {
         <Button
           fullWidth
           variant="contained"
+          color={operation === 'approve' ? 'approve' : 'transfer'}
           onClick={operation === 'approve' ? handleApprove : handleTransfer}
           disabled={!canSubmit || isPending || isConfirming}
           startIcon={isPending || isConfirming ? 
