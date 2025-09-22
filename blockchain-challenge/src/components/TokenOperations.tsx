@@ -52,8 +52,6 @@ export function TokenOperations({ defaultOperation = 'transfer' }: TokenOperatio
       const tokenSymbol = selectedToken as 'DAI' | 'USDC'
       const tokenContract = selectedToken === 'DAI' ? SEPOLIA_CONTRACTS.DAI : SEPOLIA_CONTRACTS.USDC
 
-      console.log('🎯 Adding ApproveTransfer receipt:', operation, selectedToken)
-
       addTransaction({
         hash: hash,
         type: operation as 'transfer' | 'approve',
@@ -77,13 +75,8 @@ export function TokenOperations({ defaultOperation = 'transfer' }: TokenOperatio
   const handleApprove = () => {
     if (!isValidAmount || !isValidSpender) return
 
-    console.group('🚀 Initiating Approve')
     const decimals = TOKEN_DECIMALS[selectedToken]
     const parsedAmount = parseUnits(amount, decimals)
-    console.log('📊 Token:', selectedToken)
-    console.log('📊 Spender:', spenderAddress)
-    console.log('📊 Amount:', parsedAmount.toString())
-    console.groupEnd()
 
     reset()
     writeContract({
@@ -98,13 +91,8 @@ export function TokenOperations({ defaultOperation = 'transfer' }: TokenOperatio
   const handleTransfer = () => {
     if (!isValidAmount || !isValidRecipient) return
 
-    console.group('🚀 Initiating Transfer')
     const decimals = TOKEN_DECIMALS[selectedToken]
     const parsedAmount = parseUnits(amount, decimals)
-    console.log('📊 Token:', selectedToken)
-    console.log('📊 Recipient:', recipientAddress)
-    console.log('📊 Amount:', parsedAmount.toString())
-    console.groupEnd()
 
     reset()
     writeContract({
