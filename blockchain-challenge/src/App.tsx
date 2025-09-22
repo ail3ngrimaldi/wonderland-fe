@@ -1,7 +1,5 @@
 import { Container, Box } from '@mui/material'
 import { Header } from './components/Header'
-import { NetworkStatus } from './components/NetworkStatus'
-import { TokenBalances } from './components/TokenBalances'
 import { HeroSection } from './components/HeroSection'
 
 function App() {
@@ -9,10 +7,7 @@ function App() {
     <Box>
       <Header />
       <Container sx={{ py: 3 }}>
-
-      <NetworkStatus />
-      <HeroSection/>
-        <TokenBalances />
+        <HeroSection/>
       </Container>
     </Box>
   );

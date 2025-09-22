@@ -1,5 +1,6 @@
 import { AppBar, Toolbar, Typography, Box, Container } from '@mui/material'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
+import { NetworkStatus  } from './NetworkStatus'
 
 export function Header() {
   return (
@@ -47,6 +48,7 @@ export function Header() {
           
           <ConnectButton />
         </Toolbar>
+        <NetworkStatus />
       </Container>
     </AppBar>
   )
