@@ -3,6 +3,7 @@ import { Header } from './components/Header'
 import { HeroSection } from './components/HeroSection'
 import { Routes, Route } from 'react-router-dom'
 import { BackButton } from './components/BackButton'
+import { HistoryButton } from './components/HistoryButton'
 import { TokenBalances } from './components/TokenBalances'
 import { MintButtons } from './components/MintButtons'
 import { TokenOperations } from './components/TokenOperations'
@@ -17,23 +18,26 @@ function App() {
           <Route path="/" element={<HeroSection />} />
 
           <Route path="/plant-seeds" element={
-            <Container>
+            <Container sx={{ position: 'relative' }}>
               <BackButton />
+              <HistoryButton />
               <TokenBalances />
               <MintButtons />
             </Container>
           } />
 
           <Route path="/sponsor-project" element={
-            <Container>
+            <Container sx={{ position: 'relative' }}>
               <BackButton />
+              <HistoryButton />
               <TokenOperations defaultOperation="approve" />
             </Container>
           } />
 
           <Route path="/make-impact" element={
-            <Container>
+            <Container sx={{ position: 'relative' }}>
               <BackButton />
+              <HistoryButton />
               <TokenBalances />
               <TokenOperations defaultOperation="transfer" />
             </Container>
