@@ -13,6 +13,7 @@ import { Button, Box, Typography, CircularProgress, Alert, Card, CardContent } f
     const { addTransaction } = useTransactions()
     const { writeContract, isPending, data: hash, error, reset } = useWriteContract()
     const { isLoading: isConfirming, isSuccess, data: receipt, error: receiptError } = useWaitForTransactionReceipt({ hash })
+    const [mintingToken, setMintingToken] = useState<'DAI' | 'USDC' | null>(null)
 
     useEffect(() => {
         if (isSuccess && hash && receipt && !processedHashes.has(hash)) {
@@ -27,6 +28,9 @@ import { Button, Box, Typography, CircularProgress, Alert, Card, CardContent } f
   
             setProcessedHashes(prev => new Set([...prev, hash]))
         }
+        if (isSuccess || error) {
+          setMintingToken(null)
+      }
     }, [isSuccess, hash, receipt, addTransaction, processedHashes])
 
     if (!isConnected || chain?.id !== sepolia.id || !address) {
@@ -35,7 +39,8 @@ import { Button, Box, Typography, CircularProgress, Alert, Card, CardContent } f
 
     const mintDAI = () => {
         const amount = parseTokenAmount('10', 'DAI')
-  
+        setMintingToken('DAI')
+
         reset()
         writeContract({
           address: SEPOLIA_CONTRACTS.DAI,
@@ -47,6 +52,7 @@ import { Button, Box, Typography, CircularProgress, Alert, Card, CardContent } f
 
       const mintUSDC = () => {
         const amount = parseTokenAmount('10', 'USDC')
+        setMintingToken('USDC')
         
         reset()
         writeContract({
@@ -87,20 +93,20 @@ import { Button, Box, Typography, CircularProgress, Alert, Card, CardContent } f
             variant="contained"
             color="mint"
             onClick={mintDAI}
-            disabled={isPending || isConfirming}
-            startIcon={isPending || isConfirming ? <CircularProgress size={16} /> : null}
+            disabled={mintingToken === 'DAI' }
+            startIcon={mintingToken === 'DAI' ? <CircularProgress size={16} /> : null}
           >
-            {isPending ? 'Signing DAI...' : isConfirming ? 'Mining DAI...' : 'Mint 10DAI'}
+            {mintingToken === 'DAI' ? 'Processing DAI...' : 'Mint 10 DAI'}
           </Button>
 
           <Button
             variant="contained"
             color="mint"
             onClick={mintUSDC}
-            disabled={isPending || isConfirming}
-            startIcon={isPending || isConfirming ? <CircularProgress size={16} /> : null}
+            disabled={mintingToken === 'USDC'}
+            startIcon={mintingToken === 'USDC' ? <CircularProgress size={16} /> : null}
           >
-            {isPending ? 'Signing USDC...' : isConfirming ? 'Mining USDC...' : 'Mint 10USDC'}          
+              {mintingToken === 'USDC' ? 'Processing USDC...' : 'Mint 10 USDC'}   
           </Button>
         </Box>
 
