@@ -5,16 +5,17 @@ import { TokenBalances } from './components/TokenBalances'
 import { MintButtons } from './components/MintButtons'
 import { TokenOperations } from './components/TokenOperations'
 import { EventTable } from './components/EventTable'
+import { HeroSection } from './components/HeroSection'
 
 function App() {
   return (
     <Box>
       <Header />
       <Container sx={{ py: 3 }}>
-        <NetworkStatus />
+
+      <NetworkStatus />
+      <HeroSection/>
         <TokenBalances />
-        <MintButtons />
-        <TokenOperations />
         <EventTable />
       </Container>
     </Box>
