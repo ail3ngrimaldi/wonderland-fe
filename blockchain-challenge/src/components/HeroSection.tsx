@@ -28,7 +28,7 @@ const renderCurrentView = () => {
             )
         case 'approve':
             return (
-                <Container sx={{ textAlign: 'center', py: 4, mb: 4}}>
+                <Container>
                     <Button 
                         variant="outlined" 
                         onClick={() => setCurrentView('home')}
