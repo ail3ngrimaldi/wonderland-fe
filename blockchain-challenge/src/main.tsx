@@ -9,6 +9,7 @@ import React from 'react'
   import { impactTheme } from './theme'
   import App from './App'
   import { TransactionProvider } from './context/TransactionContext'
+  import { BrowserRouter } from 'react-router-dom'
 
   import '@rainbow-me/rainbowkit/styles.css'
 
@@ -22,7 +23,9 @@ import React from 'react'
           <QueryClientProvider client={queryClient}>
             <RainbowKitProvider>
               <TransactionProvider>
-                <App />
+                <BrowserRouter>
+                  <App />
+                </BrowserRouter>
               </TransactionProvider>
             </RainbowKitProvider>
           </QueryClientProvider>
