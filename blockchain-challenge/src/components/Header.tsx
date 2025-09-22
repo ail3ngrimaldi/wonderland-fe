@@ -1,8 +1,11 @@
 import { AppBar, Toolbar, Typography, Box, Container } from '@mui/material'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { NetworkStatus  } from './NetworkStatus'
+import { useNavigate } from 'react-router-dom'
 
 export function Header() {
+  const navigate = useNavigate()
+
   return (
     <AppBar 
       position="static" 
@@ -19,13 +22,21 @@ export function Header() {
             <Typography 
               variant="h5" 
               component="h1"
+              onClick={() => navigate('/')}
               sx={{ 
                 fontWeight: 700,
                 background: '#8367c7',
                 backgroundClip: 'text',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
-                letterSpacing: '-0.5px'
+                letterSpacing: '-0.5px',
+                cursor: 'pointer',
+                userSelect: 'none',
+                '&:hover': {
+                  opacity: 0.8,
+                  transform: 'scale(1.02)'
+                },
+                transition: 'all 0.2s ease-in-out'
               }}
             >
               🌱 Impact Wallet

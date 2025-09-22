@@ -1,75 +1,9 @@
 import { Box, Button, Container, Typography } from '@mui/material'
 import { ActionCard } from './ActionCard'
-import { MintButtons } from './MintButtons'
-import { TokenOperations } from './TokenOperations'
-import { TokenBalances } from './TokenBalances'
-import { EventTable } from './EventTable'
-import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export function HeroSection() {
-const [currentView, setCurrentView] = useState<'home' | 'mint' | 'approve' | 'transfer' |'history'>('home')
-
-const renderCurrentView = () => {
-    switch (currentView) {
-        case 'mint':
-            return (
-                <Container>
-                    <Button 
-                        variant="outlined" 
-                        onClick={() => setCurrentView('home')}
-                        sx={{ mb: 3, mt: 2 }}
-                        startIcon="⬅️"
-                    >
-                    Back to Dashboard
-                    </Button>
-                    <TokenBalances />
-                    <MintButtons />
-                </Container>
-            )
-        case 'approve':
-            return (
-                <Container>
-                    <Button 
-                        variant="outlined" 
-                        onClick={() => setCurrentView('home')}
-                        sx={{ mb: 3, mt: 2 }}
-                        startIcon="⬅️"
-                    >
-                    Back to Dashboard
-                    </Button>
-                    <TokenOperations defaultOperation="approve" />
-                </Container>
-            )
-        case 'transfer':
-            return (
-                <Container>
-                    <Button 
-                        variant="outlined" 
-                        onClick={() => setCurrentView('home')}
-                        sx={{ mb: 3, mt: 2 }}
-                        startIcon="⬅️"
-                    >
-                    Back to Dashboard
-                    </Button>
-                    <TokenBalances />
-                    <TokenOperations defaultOperation="transfer" />
-                </Container>
-            )
-        case 'history':
-            return (
-                <Container>
-                    <Button 
-                        variant="outlined" 
-                        onClick={() => setCurrentView('home')}
-                        sx={{ mb: 3, mt: 2}}
-                        startIcon="⬅️"
-                    >
-                    Back to Dashboard
-                    </Button>
-                    <EventTable />
-                </Container>
-            )
-        default:
+const navigate = useNavigate()
             return (
                 <Container>
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 4 }}>
@@ -94,7 +28,7 @@ const renderCurrentView = () => {
                                 description="127 eco-tokens • 3 projects supported • View all transactions"
                                 buttonText="View History"
                                 color="#FF9800"
-                                onClick={() => setCurrentView('history')}
+                                onClick={() => navigate('/impact-history')}
                                 height={220}
                                 transparent={true}
                                 clickableCard={true}
@@ -115,7 +49,7 @@ const renderCurrentView = () => {
                             description="Generate eco-tokens to support sustainable projects and earn rewards"
                             buttonText="Start Planting"
                             color="#4CAF50"
-                            onClick={() => setCurrentView('mint')}
+                            onClick={() => navigate('/plant-seeds')}
                         />
                         <ActionCard
                             icon="🤝"
@@ -123,7 +57,7 @@ const renderCurrentView = () => {
                             description="Give permission to support meaningful causes and environmental initiatives"
                             buttonText="Become Sponsor"
                             color="#2196F3"
-                            onClick={() => setCurrentView('approve')}
+                            onClick={() => navigate('/sponsor-project')}
                         />
                         <ActionCard
                             icon="💚"
@@ -131,12 +65,9 @@ const renderCurrentView = () => {
                             description="Send your eco-tokens to create real change in the world"
                             buttonText="Start Donating"
                             color="#388E3C"
-                            onClick={() => setCurrentView('transfer')}
+                            onClick={() => navigate('/make-impact')}
                         />
                     </Box>
                 </Container>
             )
-        }
-    }
-    return renderCurrentView()
 }
