@@ -16,7 +16,6 @@ import {
 import { useAccount } from 'wagmi'
 import { sepolia } from 'wagmi/chains'
 import { useTransactions } from '../context/TransactionContext'
-import { SEPOLIA_CONTRACTS } from '../config/contracts'
 import { useTransactionDetails } from '../hooks/useTransactionDetails'
 import { formatHash } from '../utils/tokenUtils'
 
@@ -31,6 +30,15 @@ function TransactionRow({ transaction, index }: { transaction: any, index: numbe
          default: return 'default'
         }
     }
+
+    const getActionLabel = (type: string) => {
+      switch (type) {
+          case 'mint': return '🌱 Planted Seeds (MINT)'
+          case 'transfer': return '💚 Made Impact (TRANSFER)'
+          case 'approve': return '🤝 Sponsored Project (APPROVE)'
+          default: return type.toUpperCase()
+      }
+  }
  
     const formatTime = (timestamp: number) => {
        return new Date(timestamp).toLocaleTimeString()
@@ -40,7 +48,7 @@ function TransactionRow({ transaction, index }: { transaction: any, index: numbe
         <TableRow key={`${transaction.hash}-${index}`}>
             <TableCell>
                 <Chip 
-                    label={transaction.type.toUpperCase()} 
+                    label={getActionLabel(transaction.type)}
                     color={getEventColor(transaction.type) as any}
                     size="small"
                 />
@@ -86,7 +94,7 @@ export function EventTable() {
        <Box sx={{ mb: 2 }}>
          <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
            <Typography variant="h6">
-             Your Transaction History ({transactions.length} transactions)
+           Your Impact History ({transactions.length} actions)
            </Typography>
  
            {transactions.length > 0 && (
@@ -103,19 +111,19 @@ export function EventTable() {
  
          {transactions.length === 0 ? (
            <Typography variant="body2" color="text.secondary">
-             No transactions yet. Start by minting some tokens!
+             No impact actions yet. Start by planting some seeds!
            </Typography>
          ) : (
            <TableContainer component={Paper}>
              <Table size="small">
                <TableHead>
                  <TableRow>
-                   <TableCell>Type</TableCell>
+                   <TableCell>Action</TableCell>
                    <TableCell>Token</TableCell>
                    <TableCell>Amount</TableCell>
                    <TableCell>Time</TableCell>
-                   <TableCell>Blockchain Data</TableCell>
-                   <TableCell>Transaction</TableCell>
+                   <TableCell>Status</TableCell>
+                   <TableCell>Details</TableCell>
                  </TableRow>
                </TableHead>
                <TableBody>

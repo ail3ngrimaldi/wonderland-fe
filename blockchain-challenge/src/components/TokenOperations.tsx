@@ -21,19 +21,22 @@ import { useTransactions } from '../context/TransactionContext'
 
 type TokenType = 'DAI' | 'USDC'
 
-export function TokenOperations() {
-    // Estados del formulario
+interface TokenOperationsProps {
+  defaultOperation?: 'approve' | 'transfer'
+}
+
+export function TokenOperations({ defaultOperation = 'transfer' }: TokenOperationsProps) {
   const [selectedToken, setSelectedToken] = useState<TokenType>('DAI')
   const [amount, setAmount] = useState('')
   const [recipientAddress, setRecipientAddress] = useState('')
   const [spenderAddress, setSpenderAddress] = useState('')
-  const [operation, setOperation] = useState<'approve' | 'transfer'>('transfer')
+  const [operation, setOperation] = useState<'approve' | 'transfer'>(defaultOperation)
   const { address, isConnected, chain } = useAccount()
   const { writeContract, isPending, data: hash, error, reset } = useWriteContract()
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })
   const { addTransaction } = useTransactions()
 
-  // Solo mostrar si está conectado y en Sepolia
+  // Solo mostrar si está conectado y en Sepolia, TODO: Move to utils
   if (!isConnected || chain?.id !== sepolia.id || !address) {
       return (
         <Alert severity="warning" sx={{ mb: 2 }}>
@@ -47,8 +50,6 @@ export function TokenOperations() {
       // Basic receipt
       const tokenSymbol = selectedToken as 'DAI' | 'USDC'
       const tokenContract = selectedToken === 'DAI' ? SEPOLIA_CONTRACTS.DAI : SEPOLIA_CONTRACTS.USDC
-
-      console.log('🎯 Adding ApproveTransfer receipt:', operation, selectedToken)
 
       addTransaction({
         hash: hash,
@@ -69,17 +70,11 @@ export function TokenOperations() {
   const isValidSpender = operation === 'approve' ? isAddress(spenderAddress) : true
   const canSubmit = isValidAmount && isValidRecipient && isValidSpender
 
-  // Función para aprobar tokens
   const handleApprove = () => {
     if (!isValidAmount || !isValidSpender) return
 
-    console.group('🚀 Initiating Approve')
     const decimals = TOKEN_DECIMALS[selectedToken]
     const parsedAmount = parseUnits(amount, decimals)
-    console.log('📊 Token:', selectedToken)
-    console.log('📊 Spender:', spenderAddress)
-    console.log('📊 Amount:', parsedAmount.toString())
-    console.groupEnd()
 
     reset()
     writeContract({
@@ -90,17 +85,11 @@ export function TokenOperations() {
     })
   }
 
-  // Función para transferir tokens
   const handleTransfer = () => {
     if (!isValidAmount || !isValidRecipient) return
 
-    console.group('🚀 Initiating Transfer')
     const decimals = TOKEN_DECIMALS[selectedToken]
     const parsedAmount = parseUnits(amount, decimals)
-    console.log('📊 Token:', selectedToken)
-    console.log('📊 Recipient:', recipientAddress)
-    console.log('📊 Amount:', parsedAmount.toString())
-    console.groupEnd()
 
     reset()
     writeContract({
@@ -115,69 +104,65 @@ export function TokenOperations() {
     <Card sx={{ mb: 2 }}>
       <CardContent>
         <Typography variant="h6" gutterBottom>
-          Approve & Transfer Tokens
+          Help your favorite environmental projects!
         </Typography>
-        {/* Selector de operación */}
+
         <FormControl fullWidth sx={{ mb: 2 }}>
-          <InputLabel>Operation</InputLabel>
+          <InputLabel>Select which way you'll be contributing</InputLabel>
           <Select
             value={operation}
-            label="Operation"
+            label="Select which way you'll be contributing"
             onChange={(e) => setOperation(e.target.value as 'approve' | 'transfer')}
           >
-            <MenuItem value="transfer">Transfer (send tokens)</MenuItem>
-            <MenuItem value="approve">Approve (give permission)</MenuItem>
+            <MenuItem value="transfer">Make Immediate Donations (send tokens to the project)</MenuItem>
+            <MenuItem value="approve">Sponsor Project (give permission to use some of your tokens)</MenuItem>
           </Select>
         </FormControl>
 
-        {/* Selector de token */}
         <FormControl fullWidth sx={{ mb: 2 }}>
-          <InputLabel>Token</InputLabel>
+          <InputLabel>Choose your token</InputLabel>
           <Select
             value={selectedToken}
-            label="Token"
+            label="Choose your token"
             onChange={(e) => setSelectedToken(e.target.value as TokenType)}
           >
-            <MenuItem value="DAI">DAI (18 decimals)</MenuItem>
-            <MenuItem value="USDC">USDC (6 decimals)</MenuItem>
+            <MenuItem value="DAI">🌱 DAI Token (18 decimals)</MenuItem>
+            <MenuItem value="USDC">💚 USDC Token (6 decimals)</MenuItem>
           </Select>
         </FormControl>
 
-        {/* Input de cantidad */}
         <TextField
           fullWidth
-          label="Amount"
+          label="How many tokens will you provide?"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
           error={amount !== '' && !isValidAmount}
-          helperText={amount !== '' && !isValidAmount ? 'Enter a valid positive number' : ''}
+          helperText={amount !== '' && !isValidAmount ? 'Tokens are represented in positive numbers' : ''}
           sx={{ mb: 2 }}
         />
 
-        {/* Input condicional según operación */}
         {operation === 'transfer' ? (
           <TextField
             fullWidth
-            label="Recipient Address"
+            label="Address of the NGO Project you'll be contributing"
             value={recipientAddress}
             onChange={(e) => setRecipientAddress(e.target.value)}
             error={recipientAddress !== '' && !isValidRecipient}
-            helperText={recipientAddress !== '' && !isValidRecipient ? 'Enter a valid Ethereum address' : 'Address that will receive the tokens'}
+            helperText={recipientAddress !== '' && !isValidRecipient ? 'Enter a valid Ethereum address' : 'This address will receive the tokens'}
             sx={{ mb: 2 }}
           />
         ) : (
           <TextField
             fullWidth
-            label="Spender Address"
+            label="Which project do you want to have power over these tokens?"
             value={spenderAddress}
             onChange={(e) => setSpenderAddress(e.target.value)}
             error={spenderAddress !== '' && !isValidSpender}
-            helperText={spenderAddress !== '' && !isValidSpender ? 'Enter a valid Ethereum address' : 'Address that can spend your tokens'}
+            helperText={spenderAddress !== '' && !isValidSpender ? 'You have to insert the ethereum address of the project' : 'Address that can spend your tokens'}
             sx={{ mb: 2 }}
           />
         )}
 
-        {/* Botón de acción */}
         <Button
           fullWidth
           variant="contained"
@@ -186,10 +171,9 @@ export function TokenOperations() {
           disabled={!canSubmit || isPending || isConfirming}
           startIcon={isPending || isConfirming ? 
           <CircularProgress size={16} /> : null}>
-            {isPending ? `Signing ${operation}...` : isConfirming ? `Mining ${operation}...` : operation === 'approve' ? 'Approve Tokens' : 'Transfer Tokens'}
+            {isPending ? `Waiting for confirmation for ${operation}...` : isConfirming ? `Processing ${operation}...` : operation === 'approve' ? 'Become a Sponsor' : 'Send Tokens Right Now'}
         </Button>
 
-        {/* Estados de error y éxito */}
         {error && (
           <Alert severity="error" sx={{ mt: 2 }}>
             Error: {error.message}
@@ -206,7 +190,7 @@ export function TokenOperations() {
                   target="_blank" 
                   rel="noopener noreferrer"
                 >
-                  View on Etherscan
+                  View the transaction data on etherscan
                 </a>
               </Box>
             )}

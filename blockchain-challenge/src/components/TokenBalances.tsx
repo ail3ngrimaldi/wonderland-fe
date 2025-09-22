@@ -11,6 +11,9 @@ export function TokenBalances() {
       address,
       token: SEPOLIA_CONTRACTS.DAI,
       chainId: sepolia.id,
+      query: {
+        refetchInterval: 5000,
+      }
     })
 
     // USDC Hook
@@ -18,6 +21,9 @@ export function TokenBalances() {
       address,
       token: SEPOLIA_CONTRACTS.USDC,
       chainId: sepolia.id,
+      query: {
+        refetchInterval: 5000,
+      }
     })
 
     // || chain?.id !== sepolia.id

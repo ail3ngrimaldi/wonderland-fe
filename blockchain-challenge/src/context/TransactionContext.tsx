@@ -30,7 +30,6 @@ export function TransactionProvider({ children }: { children: ReactNode }) {
           const data = JSON.parse(stored)
 
           if (data.version === STORAGE_VERSION && Array.isArray(data.transactions)) {
-            console.log('Loaded', data.transactions.length, 'transaction hashes from storage')
             return data.transactions
           } else {
             console.log('Storage version mismatch, starting fresh')
@@ -64,41 +63,31 @@ export function TransactionProvider({ children }: { children: ReactNode }) {
 
     const addTransaction = useCallback((transaction: 
       StoredTransaction) => {
-        console.group('🔍 DEBUG addTransaction')
-        console.log('- Type:', transaction.type)
-        console.log('- Hash:', formatHash(transaction.hash))
-        console.log('- Contract:', transaction.tokenContract)
-        console.log('- Current transactions count:',
-      transactions.length)
-        console.groupEnd()
-    
         setTransactions(prev => {
           const exists = prev.some(tx => tx.hash === transaction.hash)
           if (exists) {
-            console.log('🔄 Transaction hash already stored:', formatHash(transaction.hash))
             return prev
           }
-    
-        console.log('✅ Adding transaction hash:', transaction.type, formatHash(transaction.hash))
           return [transaction, ...prev]
         })
       }, [])
 
-    // const clearTransactions = useCallback(() => {
-    //   setTransactions([])
-    //   localStorage.removeItem(STORAGE_KEY)
-    //   console.log('Cleared all transaction hashes')
-    // }, [])
+    const clearTransactions = useCallback(() => {
+      setTransactions([])
+      localStorage.removeItem(STORAGE_KEY)
+      console.log('Cleared all transaction hashes')
+    }, [])
 
     const getTransactionsByType = useCallback((type: 'mint' | 'transfer' | 'approve') => {
-      return transactions.filer(tx => tx.type === type)
+      return transactions.filter(tx => tx.type === type)
     }, [transactions])
 
     return (
         <TransactionContext.Provider value={{
           transactions,
           addTransaction,
-          getTransactionsByType
+          getTransactionsByType,
+          clearTransactions
         }}>
           {children}
         </TransactionContext.Provider>
