@@ -21,13 +21,17 @@ import { useTransactions } from '../context/TransactionContext'
 
 type TokenType = 'DAI' | 'USDC'
 
-export function TokenOperations() {
+interface TokenOperationsProps {
+  defaultOperation?: 'approve' | 'transfer'
+}
+
+export function TokenOperations({ defaultOperation = 'transfer' }: TokenOperationsProps) {
     // Estados del formulario
   const [selectedToken, setSelectedToken] = useState<TokenType>('DAI')
   const [amount, setAmount] = useState('')
   const [recipientAddress, setRecipientAddress] = useState('')
   const [spenderAddress, setSpenderAddress] = useState('')
-  const [operation, setOperation] = useState<'approve' | 'transfer'>('transfer')
+  const [operation, setOperation] = useState<'approve' | 'transfer'>(defaultOperation)
   const { address, isConnected, chain } = useAccount()
   const { writeContract, isPending, data: hash, error, reset } = useWriteContract()
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })

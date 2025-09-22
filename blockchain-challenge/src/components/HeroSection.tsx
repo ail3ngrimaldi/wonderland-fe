@@ -34,7 +34,7 @@ const [currentView, setCurrentView] = useState<'home' | 'mint' | 'approve' | 'tr
                         >
                         Back to Dashboard
                         </Button>
-                        <TokenOperations />
+                        <TokenOperations defaultOperation="approve" />
                     </Container>
                 )
             case 'transfer':
@@ -48,7 +48,7 @@ const [currentView, setCurrentView] = useState<'home' | 'mint' | 'approve' | 'tr
                         >
                         Back to Dashboard
                         </Button>
-                        <TokenOperations />
+                        <TokenOperations defaultOperation="transfer" />
                     </Container>
                 )
             default:
