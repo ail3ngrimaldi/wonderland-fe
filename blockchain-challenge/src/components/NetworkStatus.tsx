@@ -12,7 +12,7 @@ export function NetworkStatus() {
     return (
       <Box sx={{ mb: 2 }}>
         <Alert severity="success">
-          ✅ Connected to Sepolia testnet
+          Successfully connected to Sepolia testnet
         </Alert>
       </Box>
     )

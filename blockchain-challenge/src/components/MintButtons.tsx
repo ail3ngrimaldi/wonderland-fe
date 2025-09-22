@@ -60,11 +60,11 @@ import { Button, Box, Typography, CircularProgress, Alert, Card, CardContent } f
     return (
       <Box sx={{ mb: 2 }}>
         <Typography variant="h6" gutterBottom>
-          Mint Test Tokens
+          🌱 Plant Seeds
         </Typography>
 
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          Get free testnet tokens to test the app functionality
+          Create new eco-tokens to fund environmental projects
         </Typography>
 
         <Card sx={{ mb: 2, bgcolor: 'grey.50' }}>
