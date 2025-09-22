@@ -2,8 +2,6 @@ import { Container, Box } from '@mui/material'
 import { Header } from './components/Header'
 import { NetworkStatus } from './components/NetworkStatus'
 import { TokenBalances } from './components/TokenBalances'
-import { MintButtons } from './components/MintButtons'
-import { TokenOperations } from './components/TokenOperations'
 import { EventTable } from './components/EventTable'
 import { HeroSection } from './components/HeroSection'
 
