@@ -1,18 +1,21 @@
 import { Button, Box, Typography, CircularProgress, Alert } from '@mui/material'
-  import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
-  import { sepolia } from 'wagmi/chains'
+  import { useAccount, useWriteContract, useWaitForTransactionReceipt, useChainId } from 'wagmi'
   import { SEPOLIA_CONTRACTS, ERC20_ABI } from '../config/contracts'
   import { useTransactions } from '../context/TransactionContext'
   import { useEffect, useState } from 'react'
   import { parseTokenAmount, getTokenSymbol } from '../utils/tokenUtils'
+  import { sepolia } from 'wagmi/chains'
 
   export function MintButtons() {
-    const { address, isConnected, chain } = useAccount()
+    const { address } = useAccount()
     const [processedHashes, setProcessedHashes] = useState<Set<string>>(new Set())
     const { addTransaction } = useTransactions()
     const { writeContract, isPending, data: hash, error, reset } = useWriteContract()
     const { isLoading: isConfirming, isSuccess, data: receipt, error: receiptError } = useWaitForTransactionReceipt({ hash })
     const [mintingToken, setMintingToken] = useState<'DAI' | 'USDC' | null>(null)
+    const chainId = useChainId()
+    const isOnSepolia = chainId === sepolia.id
+
 
     useEffect(() => {
         if (isSuccess && hash && receipt && !processedHashes.has(hash)) {
@@ -32,11 +35,9 @@ import { Button, Box, Typography, CircularProgress, Alert } from '@mui/material'
       }
     }, [isSuccess, hash, receipt, addTransaction, processedHashes])
 
-    if (!isConnected || chain?.id !== sepolia.id || !address) {
-      return null
-    }
-
     const mintDAI = () => {
+        if (!isOnSepolia) return
+
         const amount = parseTokenAmount('10', 'DAI')
         setMintingToken('DAI')
 
@@ -45,11 +46,13 @@ import { Button, Box, Typography, CircularProgress, Alert } from '@mui/material'
           address: SEPOLIA_CONTRACTS.DAI,
           abi: ERC20_ABI,
           functionName: 'mint',
-          args: [address, amount],
+          args: [address!, amount],
         })
       }
 
       const mintUSDC = () => {
+        if (!isOnSepolia) return
+
         const amount = parseTokenAmount('10', 'USDC')
         setMintingToken('USDC')
         
@@ -58,7 +61,7 @@ import { Button, Box, Typography, CircularProgress, Alert } from '@mui/material'
           address: SEPOLIA_CONTRACTS.USDC,
           abi: ERC20_ABI,
           functionName: 'mint',
-          args: [address, amount],
+          args: [address!, amount],
         })
       }
 
@@ -67,6 +70,12 @@ import { Button, Box, Typography, CircularProgress, Alert } from '@mui/material'
         <Typography variant="h6" gutterBottom>
           🌱 Plant Seeds
         </Typography>
+
+        {!isOnSepolia && (
+        <Alert severity="warning" sx={{ mb: 2 }}>
+          Please switch to Sepolia testnet to mint eco-tokens.
+        </Alert>
+      )}
 
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
           Create new eco-tokens to fund environmental projects
@@ -77,7 +86,7 @@ import { Button, Box, Typography, CircularProgress, Alert } from '@mui/material'
             variant="contained"
             color="mint"
             onClick={mintDAI}
-            disabled={mintingToken === 'DAI' }
+            disabled={!isOnSepolia || mintingToken === 'DAI'}
             startIcon={mintingToken === 'DAI' ? <CircularProgress size={16} /> : null}
           >
             {mintingToken === 'DAI' ? 'Planting DAI Seeds...' : 'Create 10 DAI'}
@@ -87,7 +96,7 @@ import { Button, Box, Typography, CircularProgress, Alert } from '@mui/material'
             variant="contained"
             color="mint"
             onClick={mintUSDC}
-            disabled={mintingToken === 'USDC'}
+            disabled={!isOnSepolia || mintingToken === 'USDC'}
             startIcon={mintingToken === 'USDC' ? <CircularProgress size={16} /> : null}
           >
               {mintingToken === 'USDC' ? 'Planting USDC Seeds...' : 'Create 10 USDC'}   
