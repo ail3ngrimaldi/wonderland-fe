@@ -4,7 +4,7 @@ import { sepolia } from 'wagmi/chains'
 import { SEPOLIA_CONTRACTS } from '../config/contracts'
 
 export function TokenBalances() {
-    const { address, isConnected, chain } = useAccount()
+    const { address } = useAccount()
 
     // DAI Hook
     const { data: daiBalance, isLoading: daiLoading } = useBalance({
@@ -25,11 +25,6 @@ export function TokenBalances() {
         refetchInterval: 5000,
       }
     })
-
-    // || chain?.id !== sepolia.id
-    if (!isConnected ) {
-      return null
-    }
 
     return (
       <Box sx={{ mb: 2 }}>
