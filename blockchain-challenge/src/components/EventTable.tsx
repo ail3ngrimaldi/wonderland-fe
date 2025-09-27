@@ -13,8 +13,6 @@ import {
     Button,
     CircularProgress
   } from '@mui/material'
-import { useAccount } from 'wagmi'
-import { sepolia } from 'wagmi/chains'
 import { useTransactions } from '../context/TransactionContext'
 import { useTransactionDetails } from '../hooks/useTransactionDetails'
 import { formatHash } from '../utils/tokenUtils'
@@ -83,12 +81,7 @@ function TransactionRow({ transaction, index }: { transaction: any, index: numbe
    }
  
 export function EventTable() {
-    const { isConnected, chain } = useAccount()
     const { transactions, clearTransactions } = useTransactions()
- 
-    if (!isConnected || chain?.id !== sepolia.id) {
-       return null
-    }
  
     return (
        <Box sx={{ mb: 2 }}>
