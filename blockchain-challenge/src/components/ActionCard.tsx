@@ -10,6 +10,7 @@ interface ActionCardProps {
   height?: number | string
   transparent?: boolean
   clickableCard?: boolean
+  testId?: string
 }
 
 export function ActionCard({ 
@@ -21,7 +22,8 @@ export function ActionCard({
   onClick,
   height = 320,
   transparent = false,
-  clickableCard = false
+  clickableCard = false,
+  testId
 }: ActionCardProps) {
 
 const baseStyles = {
@@ -43,6 +45,7 @@ const baseStyles = {
 if (clickableCard) {
   return (
     <Card 
+    data-testid={testId || 'action-card'}
     onClick={onClick}
     sx={{
         ...baseStyles,
@@ -97,7 +100,7 @@ if (clickableCard) {
             {description}
           </Typography>
           <Button
-            variant="contained"
+            data-testid={testId || 'action-card-button'}            variant="contained"
             onClick={onClick}
             sx={{ 
               bgcolor: color,

@@ -20,6 +20,7 @@ export function Header() {
         <Toolbar sx={{ justifyContent: 'space-between', py: 1 }}>
           <Box display="flex" alignItems="center" gap={2}>
             <Typography 
+              data-testid="app-title"
               variant="h5" 
               component="h1"
               onClick={() => navigate('/')}
@@ -42,6 +43,7 @@ export function Header() {
               🌱 Impact Wallet
             </Typography>
             <Typography 
+              data-testid="environment-badge"
               variant="caption" 
               sx={{ 
                 color: 'text.secondary',
