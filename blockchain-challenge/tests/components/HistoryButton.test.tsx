@@ -1,7 +1,7 @@
 import { describe, vi, beforeEach } from 'vitest'
 import { BrowserRouter } from 'react-router-dom'
-import { HistoryButton } from '../HistoryButton'
-import { testNavigationButton } from '../../test/navigationButtonTest'
+import { HistoryButton } from '../../src/components/ui/HistoryButton'
+import { testNavigationButton } from '../navigationButtonTest'
 
 const mockNavigate = vi.fn()
 

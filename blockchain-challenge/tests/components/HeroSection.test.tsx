@@ -2,8 +2,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { BrowserRouter } from 'react-router-dom'
-import { HeroSection } from '../HeroSection'
-import { createMockUseAccount } from '../../test/blockchain-mocks'
+import { HeroSection } from '../../src/components/ui/HeroSection'
+import { createMockUseAccount } from '../__mocks__/blockchain-mocks'
 
 const mockUseAccount = vi.fn()
 vi.mock('wagmi', () => ({

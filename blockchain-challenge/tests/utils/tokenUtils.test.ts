@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
-import { formatHash, getTokenSymbol, getTokenDecimals, parseTokenAmount } from '../tokenUtils'
+import { formatHash, getTokenSymbol, getTokenDecimals, parseTokenAmount } from '../../src/utils/tokenUtils'
 import { parseUnits } from 'viem'
-import { SEPOLIA_CONTRACTS } from '../../config/contracts'
+import { SEPOLIA_CONTRACTS } from '../../src/config/contracts'
 
 describe('tokenUtils', () => {
   describe('formatHash function', () => {

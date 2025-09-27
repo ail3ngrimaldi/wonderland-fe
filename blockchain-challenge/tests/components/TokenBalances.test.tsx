@@ -1,13 +1,13 @@
 import { render, screen } from '@testing-library/react'
 import { vi, describe, it, expect, beforeEach } from 'vitest'
-import { TokenBalances } from '../TokenBalances'
-import { SEPOLIA_CONTRACTS } from '../../config/contracts'
+import { TokenBalances } from '../../src/components/features/TokenBalances'
+import { SEPOLIA_CONTRACTS } from '../../src/config/contracts'
 import {
   mockUseAccount,
   mockUseBalance,
   createMockUseAccount,
   createMockUseBalance
-} from '../../test/blockchain-mocks'
+} from '../__mocks__/blockchain-mocks'
 
 vi.mock('wagmi', () => ({
   useAccount: (args: any) => mockUseAccount(args),

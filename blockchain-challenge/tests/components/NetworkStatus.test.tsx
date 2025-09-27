@@ -1,15 +1,14 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { BrowserRouter } from 'react-router-dom'
-import { Header } from '../Header'
+import { NetworkStatus } from '../../src/components/features/NetworkStatus'
 import { 
   createMockUseAccount, 
   MOCK_CHAINS 
-} from '../../test/blockchain-mocks'
+} from '../__mocks__/blockchain-mocks'
 
-const mockSwitchChain = vi.fn()
 const mockUseAccount = vi.fn()
+const mockSwitchChain = vi.fn()
 
 vi.mock('wagmi', () => ({
   useAccount: () => mockUseAccount(),
@@ -20,78 +19,50 @@ vi.mock('wagmi/chains', () => ({
   sepolia: { id: 11155111, name: 'Sepolia' }
 }))
 
-vi.mock('@rainbow-me/rainbowkit', () => ({
-  ConnectButton: () => <button data-testid="wallet-connect">Connect Wallet</button>
-}))
-
-const mockNavigate = vi.fn()
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom')
-  return {
-    ...actual,
-    useNavigate: () => mockNavigate
-  }
-})
-
-describe('Header with NetworkStatus Integration', () => {
+describe('NetworkStatus', () => {
   const user = userEvent.setup()
-  
+
   beforeEach(() => {
     vi.clearAllMocks()
   })
 
   describe('When wallet is not connected', () => {
-    it('should render header without network status', () => {
+    it('should not render anything', () => {
       mockUseAccount.mockReturnValue(createMockUseAccount({
         isConnected: false,
         chain: null
       }))
       
-      render(
-        <BrowserRouter>
-          <Header />
-        </BrowserRouter>
-      )
-      
-      expect(screen.getByText(/Impact Wallet/i)).toBeInTheDocument()
       expect(screen.queryByTestId('network-status-container')).not.toBeInTheDocument()
     })
   })
 
-  describe('When connected to Sepolia', () => {
+  describe('When connected to Sepolia (correct network)', () => {
     it('should show success message', () => {
       mockUseAccount.mockReturnValue(createMockUseAccount({
         isConnected: true,
         chain: MOCK_CHAINS.SEPOLIA
       }))
       
-      render(
-        <BrowserRouter>
-          <Header />
-        </BrowserRouter>
-      )
+      render(<NetworkStatus />)
       
       expect(screen.getByTestId('network-status-container')).toBeInTheDocument()
       expect(screen.getByTestId('network-status-success')).toBeInTheDocument()
       expect(screen.getByText('Successfully connected to Sepolia testnet')).toBeInTheDocument()
-      expect(screen.queryByTestId('switch-network-button')).not.toBeInTheDocument()
+      
+      expect(screen.queryByTestId('switch-button')).not.toBeInTheDocument()
     })
   })
 
   describe('When connected to wrong network', () => {
-    it('should show warning and switch button', async () => {
+    it('should show warning message with switch button', () => {
       mockUseAccount.mockReturnValue(createMockUseAccount({
         isConnected: true,
         chain: MOCK_CHAINS.MAINNET
       }))
       
-      render(
-        <BrowserRouter>
-          <Header />
-        </BrowserRouter>
-      )
+      render(<NetworkStatus />)
       
-      expect(screen.getByTestId('network-status-container')).toBeInTheDocument()
       expect(screen.getByTestId('network-status-warning')).toBeInTheDocument()
       expect(screen.getByText(/Careful! For this transaction Sepolia testnet is preferred/)).toBeInTheDocument()
       
@@ -102,15 +73,10 @@ describe('Header with NetworkStatus Integration', () => {
     it('should call switchChain when switch button is clicked', async () => {
       mockUseAccount.mockReturnValue(createMockUseAccount({
         isConnected: true,
-        chain: MOCK_CHAINS.MAINNET
+        chain: MOCK_CHAINS.POLYGON
       }))
       
-      render(
-        <BrowserRouter>
-          <Header />
-        </BrowserRouter>
-      )
-      
+      render(<NetworkStatus />)
       const switchButton = screen.getByText('Switch to Sepolia')
       await user.click(switchButton)
       
@@ -119,23 +85,28 @@ describe('Header with NetworkStatus Integration', () => {
     })
   })
 
-  describe('Header navigation', () => {
-    it('should navigate home when title is clicked', async () => {
+  describe('Edge cases', () => {
+    it('should handle undefined chain gracefully', () => {
       mockUseAccount.mockReturnValue(createMockUseAccount({
         isConnected: true,
-        chain: MOCK_CHAINS.SEPOLIA
+        chain: undefined
       }))
       
-      render(
-        <BrowserRouter>
-          <Header />
-        </BrowserRouter>
-      )
+      render(<NetworkStatus />)
       
-      const title = screen.getByText(/Impact Wallet/i)
-      await user.click(title)
+      expect(screen.getByTestId('network-status-warning')).toBeInTheDocument()
+      expect(screen.getByText('Switch to Sepolia')).toBeInTheDocument()
+    })
+
+    it('should handle chain without id property', () => {
+      mockUseAccount.mockReturnValue(createMockUseAccount({
+        isConnected: true,
+        chain: { id: null }
+      }))
       
-      expect(mockNavigate).toHaveBeenCalledWith('/')
+      render(<NetworkStatus />)
+      
+      expect(screen.getByTestId('network-status-warning')).toBeInTheDocument()
     })
   })
 })

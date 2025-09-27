@@ -1,7 +1,7 @@
 import { Card, CardContent, Typography, Box, CircularProgress } from '@mui/material'
 import { useAccount, useBalance } from 'wagmi'
 import { sepolia } from 'wagmi/chains'
-import { SEPOLIA_CONTRACTS } from '../config/contracts'
+import { SEPOLIA_CONTRACTS } from '../../config/contracts'
 
 export function TokenBalances() {
     const { address } = useAccount()

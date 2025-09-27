@@ -1,6 +1,6 @@
 import { AppBar, Toolbar, Typography, Box, Container } from '@mui/material'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
-import { NetworkStatus  } from './NetworkStatus'
+import { NetworkStatus  } from '../features/NetworkStatus'
 import { useNavigate } from 'react-router-dom'
 
 export function Header() {

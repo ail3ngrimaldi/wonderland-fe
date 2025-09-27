@@ -1,9 +1,9 @@
 import { Button, Box, Typography, CircularProgress, Alert } from '@mui/material'
   import { useAccount, useWriteContract, useWaitForTransactionReceipt, useChainId } from 'wagmi'
-  import { SEPOLIA_CONTRACTS, ERC20_ABI } from '../config/contracts'
-  import { useTransactions } from '../context/TransactionContext'
+  import { SEPOLIA_CONTRACTS, ERC20_ABI } from '../../config/contracts'
+  import { useTransactions } from '../../context/TransactionContext'
   import { useEffect, useState } from 'react'
-  import { parseTokenAmount, getTokenSymbol } from '../utils/tokenUtils'
+  import { parseTokenAmount, getTokenSymbol } from '../../utils/tokenUtils'
   import { sepolia } from 'wagmi/chains'
 
   export function MintButtons() {

@@ -1,13 +1,13 @@
 import { Container, Box } from '@mui/material'
-import { Header } from './components/Header'
-import { HeroSection } from './components/HeroSection'
+import { Header } from './components/ui/Header'
+import { HeroSection } from './components/ui/HeroSection'
 import { Routes, Route } from 'react-router-dom'
-import { BackButton } from './components/BackButton'
-import { HistoryButton } from './components/HistoryButton'
-import { TokenBalances } from './components/TokenBalances'
-import { MintButtons } from './components/MintButtons'
-import { TokenOperations } from './components/TokenOperations'
-import { EventTable } from './components/EventTable'
+import { BackButton } from './components/ui/BackButton'
+import { HistoryButton } from './components/ui/HistoryButton'
+import { TokenBalances } from './components/features/TokenBalances'
+import { MintButtons } from './components/features/MintButtons'
+import { TokenOperations } from './components/features/TokenOperations'
+import { EventTable } from './components/features/EventTable'
 
 function App() {
   return (
