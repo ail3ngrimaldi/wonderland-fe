@@ -1,19 +1,40 @@
 import { describe, it, expect } from 'vitest'
-import { formatHash, getTokenSymbol, getTokenDecimals, parseTokenAmount } from './tokenUtils'
+import { formatHash, getTokenSymbol, getTokenDecimals, parseTokenAmount } from '../tokenUtils'
 import { parseUnits } from 'viem'
-import { SEPOLIA_CONTRACTS } from '../config/contracts'
+import { SEPOLIA_CONTRACTS } from '../../config/contracts'
 
+describe('tokenUtils', () => {
   describe('formatHash function', () => {
-    it('should format long addresses correctly', () => {
+    it('should format long hash correctly', () => {
         const address = '0x1234567890abcdef1234567890abcdef12345678'
         const result = formatHash(address)
         expect(result).toBe('0x1234...5678')
     })
 
-    it('should return "-" for undefined address', () => {
+    it('should return dash for undefined hash', () => {
         const result = formatHash(undefined)
         expect(result).toBe('-')
     })
+
+    // review
+    // it('should handle empty string', () => {
+    //   // Act
+    //   const result = formatHash('')
+      
+    //   // Assert
+    //   expect(result).toBe('-')
+    // })
+    // revisar
+    // it('should handle exact boundary length (10 chars)', () => {
+    //   // Arrange
+    //   const boundaryHash = '0x12345678'
+      
+    //   // Act
+    //   const result = formatHash(boundaryHash)
+      
+    //   // Assert
+    //   expect(result).toBe('0x12345678') // Should return original (< 10)
+    // })
   })
 
   describe('getTokenSymbol', () => {
@@ -40,6 +61,12 @@ import { SEPOLIA_CONTRACTS } from '../config/contracts'
       const result = getTokenSymbol(randomAddress)
       expect(result).toBe('UNKNOWN')
     })
+
+    //review
+    // it('should return UNKNOWN for invalid address format', () => {
+    //   const result = getTokenSymbol('invalid-address')
+    //   expect(result).toBe('UNKNOWN')
+    // })
   })
 
   describe('getTokenDecimals', () => {
@@ -50,19 +77,21 @@ import { SEPOLIA_CONTRACTS } from '../config/contracts'
 
     it('should return 6 decimals for USDC', () => {
       const result = getTokenDecimals('USDC')
-      expect(result).toBe(6) // da el numero correcto?
+      expect(result).toBe(6)
     })
   })
   
-  describe('parseTokenAmount', () => {
+  describe('parseTokenAmount', () => { // Could be more descriptive of what we are testing
     it('should parse DAI amounts with 18 decimals', () => {
-        const decimals = parseTokenAmount('5', 'DAI')
-        expect(decimals).toBe(parseUnits('5', 18))
+      const amount = '100.5'
+      const decimals = parseTokenAmount(amount, 'DAI')
+        expect(decimals).toBe(parseUnits('100.5', 18))
     })
 
     it('should parse USDC amounts with 6 decimals', () => {
-        const decimals = parseTokenAmount('5', 'USDC')
-        expect(decimals).toBe(parseUnits('5', 6))
+        const amount = '100.5'
+        const decimals = parseTokenAmount(amount, 'USDC')
+        expect(decimals).toBe(parseUnits('100.5', 6))
     })
 
     it('DAI should handle different amount values', () => {
@@ -82,4 +111,23 @@ import { SEPOLIA_CONTRACTS } from '../config/contracts'
         const result3 = parseTokenAmount('0.5', 'USDC')
         expect(result3).toBe(parseUnits('0.5', 6))
     })
+
+    // review
+    // it('should handle large amounts', () => {
+    //   const largeAmount = '1000000.123456'
+    //   const result = parseTokenAmount(largeAmount, 'USDC')
+    //   expect(result).toBe(parseUnits(largeAmount, 6))
+    // })
+
+    // review
+    // it('should handle zero amount', () => {
+    //   // Act
+    //   const daiResult = parseTokenAmount('0', 'DAI')
+    //   const usdcResult = parseTokenAmount('0', 'USDC')
+      
+    //   // Assert
+    //   expect(daiResult).toBe(0n)
+    //   expect(usdcResult).toBe(0n)
+    // })
   })
+})
