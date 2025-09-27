@@ -11,7 +11,7 @@ export function BackButton() {
       sx={{ mb: 3, mt: 2 }}
       startIcon="⬅️"
     >
-      Back to Dashboard
+      Back to Home
     </Button>
   )
 }
