@@ -10,8 +10,8 @@ export function NetworkStatus() {
 
   if (chain?.id === sepolia.id) {
     return (
-      <Box sx={{ mb: 2 }}>
-        <Alert severity="success">
+      <Box data-testid="network-status-container" sx={{ mb: 2 }}>
+        <Alert data-testid="network-status-success" severity="success">
           Successfully connected to Sepolia testnet
         </Alert>
       </Box>
@@ -19,11 +19,13 @@ export function NetworkStatus() {
   }
 
   return (
-    <Box sx={{ mb: 2 }}>
+    <Box data-testid="network-status-container" sx={{ mb: 2 }}>
       <Alert 
+        data-testid="network-status-warning"
         severity="warning"
         action={
           <Button 
+            data-testid="switch-button"
             color="inherit" 
             size="small"
             onClick={() => switchChain({ chainId: sepolia.id })}
