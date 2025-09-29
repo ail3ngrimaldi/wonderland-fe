@@ -36,14 +36,8 @@ export function TokenOperations({ defaultOperation = 'transfer' }: TokenOperatio
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })
   const { addTransaction } = useTransactions()
 
-  // Solo mostrar si está conectado y en Sepolia, TODO: Move to utils
-  if (!isConnected || chain?.id !== sepolia.id || !address) {
-      return (
-        <Alert severity="warning" sx={{ mb: 2 }}>
-          ⚠️ Connect to Sepolia network to approve/transfer tokens
-        </Alert>
-      )
-  }
+  // Check if connected and on Sepolia
+  const isOnSepolia = isConnected && chain?.id === sepolia.id && address
 
   useEffect(() => {
     if (isSuccess && hash) {
@@ -57,9 +51,7 @@ export function TokenOperations({ defaultOperation = 'transfer' }: TokenOperatio
         tokenContract,
         timestamp: Date.now(),
         tokenSymbol,
-        amount,
-        blockNumber: hash.blockNumber,
-        to: tokenContract
+        amount
       })
     }
   }, [isSuccess, hash, operation, selectedToken, addTransaction])
@@ -68,10 +60,10 @@ export function TokenOperations({ defaultOperation = 'transfer' }: TokenOperatio
   const isValidAmount = amount && !isNaN(Number(amount)) && Number(amount) > 0
   const isValidRecipient = operation === 'transfer' ? isAddress(recipientAddress) : true
   const isValidSpender = operation === 'approve' ? isAddress(spenderAddress) : true
-  const canSubmit = isValidAmount && isValidRecipient && isValidSpender
+  const canSubmit = isOnSepolia && isValidAmount && isValidRecipient && isValidSpender
 
   const handleApprove = () => {
-    if (!isValidAmount || !isValidSpender) return
+    if (!isOnSepolia || !isValidAmount || !isValidSpender) return
 
     const decimals = TOKEN_DECIMALS[selectedToken]
     const parsedAmount = parseUnits(amount, decimals)
@@ -86,7 +78,7 @@ export function TokenOperations({ defaultOperation = 'transfer' }: TokenOperatio
   }
 
   const handleTransfer = () => {
-    if (!isValidAmount || !isValidRecipient) return
+    if (!isOnSepolia || !isValidAmount || !isValidRecipient) return
 
     const decimals = TOKEN_DECIMALS[selectedToken]
     const parsedAmount = parseUnits(amount, decimals)
@@ -107,12 +99,19 @@ export function TokenOperations({ defaultOperation = 'transfer' }: TokenOperatio
           Help your favorite environmental projects!
         </Typography>
 
+        {!isOnSepolia && (
+          <Alert severity="warning" sx={{ mb: 2 }}>
+            ⚠️ Connect to Sepolia network to approve/transfer tokens
+          </Alert>
+        )}
+
         <FormControl fullWidth sx={{ mb: 2 }}>
           <InputLabel>Select which way you'll be contributing</InputLabel>
           <Select
             value={operation}
             label="Select which way you'll be contributing"
             onChange={(e) => setOperation(e.target.value as 'approve' | 'transfer')}
+            disabled={!isOnSepolia}
           >
             <MenuItem value="transfer">Make Immediate Donations (send tokens to the project)</MenuItem>
             <MenuItem value="approve">Sponsor Project (give permission to use some of your tokens)</MenuItem>
@@ -125,6 +124,7 @@ export function TokenOperations({ defaultOperation = 'transfer' }: TokenOperatio
             value={selectedToken}
             label="Choose your token"
             onChange={(e) => setSelectedToken(e.target.value as TokenType)}
+            disabled={!isOnSepolia}
           >
             <MenuItem value="DAI">🌱 DAI Token (18 decimals)</MenuItem>
             <MenuItem value="USDC">💚 USDC Token (6 decimals)</MenuItem>
@@ -138,6 +138,7 @@ export function TokenOperations({ defaultOperation = 'transfer' }: TokenOperatio
           onChange={(e) => setAmount(e.target.value)}
           error={amount !== '' && !isValidAmount}
           helperText={amount !== '' && !isValidAmount ? 'Tokens are represented in positive numbers' : ''}
+          disabled={!isOnSepolia}
           sx={{ mb: 2 }}
         />
 
@@ -149,6 +150,7 @@ export function TokenOperations({ defaultOperation = 'transfer' }: TokenOperatio
             onChange={(e) => setRecipientAddress(e.target.value)}
             error={recipientAddress !== '' && !isValidRecipient}
             helperText={recipientAddress !== '' && !isValidRecipient ? 'Enter a valid Ethereum address' : 'This address will receive the tokens'}
+            disabled={!isOnSepolia}
             sx={{ mb: 2 }}
           />
         ) : (
@@ -159,6 +161,7 @@ export function TokenOperations({ defaultOperation = 'transfer' }: TokenOperatio
             onChange={(e) => setSpenderAddress(e.target.value)}
             error={spenderAddress !== '' && !isValidSpender}
             helperText={spenderAddress !== '' && !isValidSpender ? 'You have to insert the ethereum address of the project' : 'Address that can spend your tokens'}
+            disabled={!isOnSepolia}
             sx={{ mb: 2 }}
           />
         )}
@@ -166,7 +169,7 @@ export function TokenOperations({ defaultOperation = 'transfer' }: TokenOperatio
         <Button
           fullWidth
           variant="contained"
-          color={operation === 'approve' ? 'approve' : 'transfer'}
+          color="primary"
           onClick={operation === 'approve' ? handleApprove : handleTransfer}
           disabled={!canSubmit || isPending || isConfirming}
           startIcon={isPending || isConfirming ? 
