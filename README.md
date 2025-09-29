@@ -60,6 +60,8 @@ You can run these commands from the project root directory:
 | `npm test` | Run unit tests |
 | `npm run test:ui` | Run tests with UI |
 | `npm run lint` | Check code quality |
+| `npm run format` | Auto-fix code formatting |
+| `npm run format:check` | Check code formatting |
 | `npm run preview` | Preview production build |
 
 

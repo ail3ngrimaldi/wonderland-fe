@@ -17,42 +17,54 @@ function App() {
         <Routes>
           <Route path="/" element={<HeroSection />} />
 
-          <Route path="/plant-seeds" element={
-            <Container sx={{ position: 'relative' }}>
-              <BackButton />
-              <HistoryButton />
-              <TokenBalances />
-              <MintButtons />
-            </Container>
-          } />
+          <Route
+            path="/plant-seeds"
+            element={
+              <Container sx={{ position: 'relative' }}>
+                <BackButton />
+                <HistoryButton />
+                <TokenBalances />
+                <MintButtons />
+              </Container>
+            }
+          />
 
-          <Route path="/sponsor-project" element={
-            <Container sx={{ position: 'relative' }}>
-              <BackButton />
-              <HistoryButton />
-              <TokenOperations defaultOperation="approve" />
-            </Container>
-          } />
+          <Route
+            path="/sponsor-project"
+            element={
+              <Container sx={{ position: 'relative' }}>
+                <BackButton />
+                <HistoryButton />
+                <TokenOperations defaultOperation="approve" />
+              </Container>
+            }
+          />
 
-          <Route path="/make-impact" element={
-            <Container sx={{ position: 'relative' }}>
-              <BackButton />
-              <HistoryButton />
-              <TokenBalances />
-              <TokenOperations defaultOperation="transfer" />
-            </Container>
-          } />
+          <Route
+            path="/make-impact"
+            element={
+              <Container sx={{ position: 'relative' }}>
+                <BackButton />
+                <HistoryButton />
+                <TokenBalances />
+                <TokenOperations defaultOperation="transfer" />
+              </Container>
+            }
+          />
 
-          <Route path="/impact-history" element={
-            <Container>
-              <BackButton />
-              <EventTable />
-            </Container>
-          } />
+          <Route
+            path="/impact-history"
+            element={
+              <Container>
+                <BackButton />
+                <EventTable />
+              </Container>
+            }
+          />
         </Routes>
       </Container>
     </Box>
   )
 }
 
-export default App;
+export default App

@@ -5,8 +5,8 @@ export function BackButton() {
   const navigate = useNavigate()
 
   return (
-    <Button 
-      variant="outlined" 
+    <Button
+      variant="outlined"
       onClick={() => navigate('/')}
       sx={{ mb: 3, mt: 2 }}
       startIcon="⬅️"
