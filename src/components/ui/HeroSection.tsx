@@ -11,48 +11,55 @@ export function HeroSection() {
   if (!isConnected) {
     return (
       <Container>
-        <Box sx={{ 
-          display: 'flex', 
-          flexDirection: 'column',
-          alignItems: 'center', 
-          textAlign: 'center',
-          py: 8,
-          gap: 4
-        }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            textAlign: 'center',
+            py: 8,
+            gap: 4,
+          }}
+        >
           <Box>
-            <Typography   
+            <Typography
               variant="h3"
               component="h1"
               gutterBottom
-              sx={{ fontWeight: 'bold' }}>
+              sx={{ fontWeight: 'bold' }}
+            >
               🌍 Welcome to Impact Wallet
             </Typography>
-            <Typography 
+            <Typography
               variant="h5"
               color="text.secondary"
-              sx={{ mb: 4, maxWidth: '600px', mx: 'auto' }}>
+              sx={{ mb: 4, maxWidth: '600px', mx: 'auto' }}
+            >
               To start creating impact, you have to connect your wallet!
             </Typography>
-            <Typography 
+            <Typography
               variant="body1"
               color="text.secondary"
-              sx={{ mb: 6, maxWidth: '500px', mx: 'auto' }}>
-              Once connected, you'll be able to plant seeds, sponsor projects, 
+              sx={{ mb: 6, maxWidth: '500px', mx: 'auto' }}
+            >
+              Once connected, you'll be able to plant seeds, sponsor projects,
               and make real environmental impact with eco-tokens.
             </Typography>
           </Box>
-          
-          <Box sx={{ 
-            p: 3, 
-            borderRadius: 3, 
-            backgroundColor: 'background.paper',
-            border: '2px dashed',
-            borderColor: 'primary.main',
-            minWidth: '300px',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center'
-          }}>
+
+          <Box
+            sx={{
+              p: 3,
+              borderRadius: 3,
+              backgroundColor: 'background.paper',
+              border: '2px dashed',
+              borderColor: 'primary.main',
+              minWidth: '300px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
             <Typography variant="h6" gutterBottom>
               🚀 Get Started
             </Typography>
@@ -66,17 +73,19 @@ export function HeroSection() {
   // Si está conectado, mostrar el dashboard completo
   return (
     <Container>
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 4 }}>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          mb: 4,
+        }}
+      >
         <Box sx={{ flex: 1, textAlign: 'left' }}>
-          <Typography   
-            variant="h4"
-            component="h1"
-            gutterBottom>
+          <Typography variant="h4" component="h1" gutterBottom>
             🌍 Welcome to your Impact Dashboard
           </Typography>
-          <Typography 
-            variant="h6"
-            color="text.secondary">
+          <Typography variant="h6" color="text.secondary">
             Your actions create real change in the world
           </Typography>
         </Box>
@@ -99,11 +108,11 @@ export function HeroSection() {
       <Box
         sx={{
           display: 'flex',
-          justifyContent: { xs: 'center', md:'space-between' },
+          justifyContent: { xs: 'center', md: 'space-between' },
           flexWrap: 'wrap',
-          gap: { xs: 2, md: 1 }
+          gap: { xs: 2, md: 1 },
         }}
-      >                
+      >
         <ActionCard
           testId="mint"
           icon="🌱"

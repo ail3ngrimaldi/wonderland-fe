@@ -28,7 +28,7 @@ export function useTransactionDetails(hash: string | undefined) {
 
       try {
         const receipt = await publicClient.getTransactionReceipt({
-          hash: hash as `0x${string}`
+          hash: hash as `0x${string}`,
         })
 
         setData({
@@ -38,9 +38,8 @@ export function useTransactionDetails(hash: string | undefined) {
           logs: receipt.logs,
           effectiveGasPrice: receipt.effectiveGasPrice,
           from: receipt.from,
-          to: receipt.to || ''
+          to: receipt.to || '',
         })
-
       } catch (err) {
         console.error('❌ Error fetching transaction details:', err)
         setError(err instanceof Error ? err.message : 'Unknown error')

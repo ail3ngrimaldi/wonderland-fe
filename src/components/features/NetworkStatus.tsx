@@ -20,13 +20,13 @@ export function NetworkStatus() {
 
   return (
     <Box data-testid="network-status-container" sx={{ mb: 2 }}>
-      <Alert 
+      <Alert
         data-testid="network-status-warning"
         severity="warning"
         action={
-          <Button 
+          <Button
             data-testid="switch-button"
-            color="inherit" 
+            color="inherit"
             size="small"
             onClick={() => switchChain({ chainId: sepolia.id })}
           >

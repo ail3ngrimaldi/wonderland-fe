@@ -17,7 +17,7 @@ export const testNavigationButton = ({
   buttonText,
   iconText,
   expectedRoute,
-  mockNavigate
+  mockNavigate,
 }: NavigationButtonTestOptions) => {
   it('renders with correct text and icon', () => {
     render(component)

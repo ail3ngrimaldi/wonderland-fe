@@ -6,7 +6,7 @@ import {
   mockUseAccount,
   mockUseBalance,
   createMockUseAccount,
-  createMockUseBalance
+  createMockUseBalance,
 } from '../__mocks__/blockchain-mocks'
 
 vi.mock('wagmi', () => ({
@@ -28,7 +28,7 @@ describe('TokenBalances', () => {
     render(<TokenBalances />)
 
     expect(screen.queryByText('1.500000')).not.toBeInTheDocument()
-expect(screen.queryByText('2.000000')).not.toBeInTheDocument()
+    expect(screen.queryByText('2.000000')).not.toBeInTheDocument()
   })
 
   it('should render token balances', () => {

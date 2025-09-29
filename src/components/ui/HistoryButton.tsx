@@ -5,14 +5,14 @@ export function HistoryButton() {
   const navigate = useNavigate()
 
   return (
-    <Button 
-      variant="outlined" 
+    <Button
+      variant="outlined"
       onClick={() => navigate('/impact-history')}
       sx={{
         position: 'absolute',
         top: { xs: 16, md: 24 },
         right: { xs: 16, md: 24 },
-        zIndex: 10
+        zIndex: 10,
       }}
       startIcon="📊"
       color="secondary"

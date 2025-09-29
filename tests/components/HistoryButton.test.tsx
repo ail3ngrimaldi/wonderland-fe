@@ -9,7 +9,7 @@ vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom')
   return {
     ...actual,
-    useNavigate: () => mockNavigate
+    useNavigate: () => mockNavigate,
   }
 })
 
@@ -17,10 +17,14 @@ describe('HistoryButton', () => {
   beforeEach(() => vi.clearAllMocks())
 
   testNavigationButton({
-    component: <BrowserRouter><HistoryButton /></BrowserRouter>,
+    component: (
+      <BrowserRouter>
+        <HistoryButton />
+      </BrowserRouter>
+    ),
     buttonText: 'View Impact History',
     iconText: '📊',
     expectedRoute: '/impact-history',
-    mockNavigate
+    mockNavigate,
   })
 })
