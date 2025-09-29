@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
-import { BackButton } from '../BackButton'
-import { testNavigationButton } from '../../test/navigationButtonTest'
+import { BackButton } from '../../src/components/ui/BackButton'
+import { testNavigationButton } from '../navigationButtonTest'
 import { BrowserRouter } from 'react-router-dom'
 
 

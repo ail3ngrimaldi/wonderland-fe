@@ -1,13 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { MintButtons } from '../MintButtons'
+import { MintButtons } from '../../src/components/features/MintButtons'
 import { 
   createMockUseAccount,
   createMockUseWriteContract,
   createMockUseWaitForTransactionReceipt,
   MOCK_CHAINS
-} from '../../test/blockchain-mocks'
+} from '../__mocks__/blockchain-mocks'
 
 const mockUseAccount = vi.fn()
 const mockUseWriteContract = vi.fn()
@@ -25,17 +25,22 @@ vi.mock('wagmi/chains', () => ({
   sepolia: { id: 11155111, name: 'Sepolia' }
 }))
 
-vi.mock('../config/contracts', () => ({
+vi.mock('../../src/config/contracts', () => ({
   SEPOLIA_CONTRACTS: {
     DAI: '0xDAI_ADDRESS',
     USDC: '0xUSDC_ADDRESS'
+  },
+  ERC20_ABI: [],
+  TOKEN_DECIMALS: {
+    DAI: 18,
+    USDC: 6
   }
 }))
 
 const mockAddTransaction = vi.fn()
 const mockClearTransactions = vi.fn()
 
-vi.mock('../../context/TransactionContext', () => ({
+vi.mock('../../src/context/TransactionContext', () => ({
   useTransactions: () => ({
     addTransaction: mockAddTransaction,
     transactions: [],

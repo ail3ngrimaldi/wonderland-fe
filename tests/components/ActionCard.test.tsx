@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
-import { ActionCard } from '../ActionCard'
+import { ActionCard } from '../../src/components/ui/ActionCard'
 
 describe('ActionCard', () => {
   const mockProps = {

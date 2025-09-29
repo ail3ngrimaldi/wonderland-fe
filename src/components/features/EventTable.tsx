@@ -13,9 +13,9 @@ import {
     Button,
     CircularProgress
   } from '@mui/material'
-import { useTransactions } from '../context/TransactionContext'
-import { useTransactionDetails } from '../hooks/useTransactionDetails'
-import { formatHash } from '../utils/tokenUtils'
+import { useTransactions } from '../../context/TransactionContext'
+import { useTransactionDetails } from '../../hooks/useTransactionDetails'
+import { formatHash } from '../../utils/tokenUtils'
 
 function TransactionRow({ transaction, index }: { transaction: any, index: number }) {
     const { data: enrichedData, isLoading } = useTransactionDetails(transaction.hash)

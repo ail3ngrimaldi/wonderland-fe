@@ -1,5 +1,5 @@
 import { Box, Container, Typography } from '@mui/material'
-import { ActionCard } from './ActionCard'
+import { ActionCard } from '../ui/ActionCard'
 import { useNavigate } from 'react-router-dom'
 import { useAccount } from 'wagmi'
 import { ConnectButton } from '@rainbow-me/rainbowkit'

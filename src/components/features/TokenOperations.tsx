@@ -16,8 +16,8 @@ import { useState, useEffect } from 'react'
 import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
 import { parseUnits, isAddress } from 'viem'
 import { sepolia } from 'wagmi/chains'
-import { SEPOLIA_CONTRACTS, ERC20_ABI, TOKEN_DECIMALS } from '../config/contracts'
-import { useTransactions } from '../context/TransactionContext'
+import { SEPOLIA_CONTRACTS, ERC20_ABI, TOKEN_DECIMALS } from '../../config/contracts'
+import { useTransactions } from '../../context/TransactionContext'
 
 type TokenType = 'DAI' | 'USDC'
 

@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { EventTable } from '../EventTable'
+import { EventTable } from '../../src/components/features/EventTable'
 import { 
   MOCK_TRANSACTIONS
-} from '../../test/blockchain-mocks'
+} from '../__mocks__/blockchain-mocks'
 
 const mockUseTransactions = vi.fn()
 const mockUseTransactionDetails = vi.fn()
@@ -14,15 +14,15 @@ vi.mock('wagmi', () => ({
   useAccount: vi.fn()
 }))
 
-vi.mock('../../context/TransactionContext', () => ({
+vi.mock('../../src/context/TransactionContext', () => ({
   useTransactions: () => mockUseTransactions()
 }))
 
-vi.mock('../../hooks/useTransactionDetails', () => ({
+vi.mock('../../src/hooks/useTransactionDetails', () => ({
   useTransactionDetails: (hash: string) => mockUseTransactionDetails(hash)
 }))
 
-vi.mock('../../utils/tokenUtils', () => ({
+vi.mock('../../src/utils/tokenUtils', () => ({
   formatHash: (hash: string) => mockFormatHash(hash)
 }))
 
